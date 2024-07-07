@@ -104,3 +104,6 @@ def sum_two_linked_lists_vectors(LL1, LL2):
             node2 = LL2.get_node_by_index(i)
             result.append(node1.value + node2.value)
         return result
+
+
+
