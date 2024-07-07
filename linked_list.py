@@ -50,8 +50,14 @@ class LinkedList:
                 # delete node
                 if (prev_node is None) and (next_node is None):
                     self.head = None
+                    self.tail = None
                 elif (prev_node is None) and (next_node is not None):
+                    # delete head node
                     self.head = next_node
+                elif (prev_node is not None) and (next_node is None):
+                    # delete tail node
+                    prev_node.next = None
+                    self.tail = prev_node
                 else:
                     prev_node.next = next_node
                 if not all:
@@ -81,6 +87,9 @@ class LinkedList:
             current_next_node = afterNode.next
             afterNode.next = newNode
             newNode.next = current_next_node
+            if newNode.next is None:
+                self.tail = newNode
+            
 
     def get_node_by_index(self, i):
         node = self.head
@@ -104,6 +113,5 @@ def sum_two_linked_lists_vectors(LL1, LL2):
             node2 = LL2.get_node_by_index(i)
             result.append(node1.value + node2.value)
         return result
-
 
 
