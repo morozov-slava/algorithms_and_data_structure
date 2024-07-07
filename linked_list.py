@@ -83,13 +83,14 @@ class LinkedList:
             initial_head_node = self.head
             self.head = newNode
             self.head.next = initial_head_node
+            if self.head.next is None:
+                self.tail = newNode
         else:
             current_next_node = afterNode.next
             afterNode.next = newNode
             newNode.next = current_next_node
             if newNode.next is None:
                 self.tail = newNode
-            
 
     def get_node_by_index(self, i):
         node = self.head
