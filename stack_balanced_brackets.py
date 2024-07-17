@@ -25,10 +25,10 @@ def brackets_are_balanced(brackets: str):
     if len(brackets) == 0:
         raise AssertionError("Given string is empty")
     stack_obj = Stack()
-    for i in range(len(brackets)):
-        if brackets[i] == "(":
-            stack_obj.push(brackets[i])
-        elif brackets[i] == ")":
+    for b in brackets:
+        if b == "(":
+            stack_obj.push(b)
+        elif b == ")":
             if not stack_obj.size():
                 return False
             stack_obj.pop()
