@@ -25,23 +25,19 @@ def brackets_are_balanced(brackets: str):
     if len(brackets) == 0:
         raise AssertionError("Given string is empty")
     stack_obj = Stack()
-    i = 0
-    i_r = 0
-    i_l = 0
-    while i < len(brackets):
-        if (brackets[i] == ")") and (stack_obj.peek() is None):
-            return False
-        elif (brackets[i] == "(") and (not stack_obj.peek() == "("):
+    for i in range(len(brackets)):
+        if brackets[i] == "(":
             stack_obj.push(brackets[i])
-            i_l = i
-            i += 1
-        elif (brackets[i] == ")") and (stack_obj.peek() == "(") and (i > i_r):
-            stack_obj.push(brackets[i])
-            i_r = i
-            i = i_l + 1
-        else:
-            i += 1
-    return stack_obj.size() == len(brackets)
+        elif brackets[i] == ")":
+            if not stack_obj.size():
+                return False
+            stack_obj.pop()
+    return stack_obj.size() == 0
+
+
+
+
+
 
 
 
