@@ -29,18 +29,19 @@ def calculate_postfix_expression(exp: str):
         pop_value = s1.pop()
         if pop_value.isdigit():
             s2.push(int(pop_value))
-        elif pop_value == "+":
-            v1 = s2.pop()
-            v2 = s2.pop()
+            continue
+        if pop_value == "=":
+            break
+        v1 = s2.pop()
+        v2 = s2.pop()
+        if pop_value == "+":
             s2.push(v1 + v2)
         elif pop_value == "*":
-            v1 = s2.pop()
-            v2 = s2.pop()
             s2.push(v1 * v2)
-        elif pop_value == "=":
-            break 
-        else:
-            raise AssertionError("Postfix expression contains unknown values")
+        elif pop_value == "-":
+            s2.push(v1 - v2)
+        elif pop_value == "/":
+            s2.push(v1 / v2)
     return s2.peek()
 
 
