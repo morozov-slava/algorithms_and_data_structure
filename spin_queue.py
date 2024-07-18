@@ -18,8 +18,7 @@ def spin_queue(queue, n: int):
     new_array = [None for _ in range(queue.size())]
     for i in range(len(new_array)):
         new_array[int((i+n) % len(new_array))] = queue.dequeue()
-    for item in new_array:
-        queue.enqueue(item)
+    queue.queue = new_array
     return queue
 
 
