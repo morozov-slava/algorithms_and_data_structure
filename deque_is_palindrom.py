@@ -22,10 +22,13 @@ class Deque:
 
 def is_palindrome(string: str):
     dq = Deque()
-    dq.deque = [*string]
-    while dq.size() > 1:
+    for i in range(len(string) // 2):
+        dq.addFront(string[i])
+        dq.addTail(string[-(i+1)])
         if not (dq.removeFront() == dq.removeTail()):
             return False
-    return True  
+    return True
+
+
 
 
