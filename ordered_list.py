@@ -85,7 +85,12 @@ class OrderedList:
             break
             
     def clean(self, asc):
+        current_list = self.get_all()
+        self.head = None
+        self.tail = None
         self.__ascending = asc
+        for node in current_list:
+            self.add(node.value)
 
     def len(self):
         node = self.head
@@ -119,7 +124,5 @@ class OrderedStringList(OrderedList):
         if v1 != v2:
             return 1
         return 0
-
-
 
 
