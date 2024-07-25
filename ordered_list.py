@@ -118,8 +118,14 @@ class OrderedStringList(OrderedList):
     def compare(self, v1: str, v2: str):
         v1 = v1.lstrip().rstrip()
         v2 = v2.lstrip().rstrip()
-        if v1 != v2:
+        if v1 > v2:
             return 1
+        elif v1 < v2:
+            return -1
         return 0
+
+
+
+
 
 
