@@ -11,14 +11,15 @@ class NativeDictionary:
     def is_key(self, key: str):
         return key in self.slots
              
-    def put(self, key, value):
+    def put(self, key: str, value):
         i = self.hash_fun(key)
         self.slots[i] = key 
         self.values[i] = value
         
-    def get(self, key):
+    def get(self, key: str):
         i = self.hash_fun(key)
-        return self.values[i]
+        if self.slots[i] == key:
+            return self.values[i]
 
 
 
