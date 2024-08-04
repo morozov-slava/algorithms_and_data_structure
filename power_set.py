@@ -1,11 +1,11 @@
 class HashTable:
     def __init__(self, sz, stp):
-        self.size = sz
+        self.sz = sz
         self.step = stp
-        self.slots = [None] * self.size
+        self.slots = [None] * self.sz
 
     def _is_zero_size(self):
-        return self.size == 0
+        return self.sz == 0
 
     def _find_empty_slot(self, i: int):
         visited_indices = set()
@@ -15,7 +15,7 @@ class HashTable:
             if self.slots[i] is None:
                 return i
             visited_indices.add(i)
-            i = (i + self.step) % self.size
+            i = (i + self.step) % self.sz
         return 
             
     def _find_value(self, i: int, value: str):
@@ -26,10 +26,10 @@ class HashTable:
             if self.slots[i] == value:
                 return i
             visited_indices.add(i)
-            i = (i + self.step) % self.size
+            i = (i + self.step) % self.sz
         
     def hash_fun(self, value: str):
-        index = sum([(i + ord(x)) for i, x in enumerate(value)]) % self.size
+        index = sum([(i + ord(x)) for i, x in enumerate(value)]) % self.sz
         return index
         
     def seek_slot(self, value: str): 
@@ -64,21 +64,17 @@ class HashTable:
 class PowerSet(HashTable):
     def __init__(self, sz, stp):
         super().__init__(sz, stp)
-        self.power_set = [None] * sz
         self.set_values = []
-
-    def size(self):
-        return len(self.set_values)
 
     def _find_empty_slot(self, i: int, value: str):
         visited_indices = set()
         while True:
-            if (i in visited_indices) or (self.power_set[i] == value):
+            if (i in visited_indices) or (self.slots[i] == value):
                 break
-            if self.power_set[i] is None:
+            if self.slots[i] is None:
                 return i
             visited_indices.add(i)
-            i = (i + self.step) % self.size
+            i = (i + self.step) % self.sz
         return None
 
     def _find_value(self, i: int, value: str):
@@ -86,11 +82,14 @@ class PowerSet(HashTable):
         while True:
             if i in visited_indices:
                 break
-            if self.power_set[i] == value:
+            if self.slots[i] == value:
                 return i
             visited_indices.add(i)
-            i = (i + self.step) % self.size
+            i = (i + self.step) % self.sz
         return None
+
+    def size(self):
+        return len(self.set_values)
 
     def put(self, value: str):
         if self._is_zero_size():
@@ -98,7 +97,7 @@ class PowerSet(HashTable):
         i = self.hash_fun(value)
         empty_i = self._find_empty_slot(i, value)
         if not empty_i is None:
-            self.power_set[empty_i] = value
+            self.slots[empty_i] = value
             self.set_values.append(value)
             return empty_i
         return None
@@ -117,7 +116,7 @@ class PowerSet(HashTable):
         i = self.hash_fun(value)
         searching_index = self._find_value(i, value)
         if not searching_index is None:
-            self.power_set[searching_index] = None
+            self.slots[searching_index] = None
             self.set_values.remove(value)
             return True
         return False
