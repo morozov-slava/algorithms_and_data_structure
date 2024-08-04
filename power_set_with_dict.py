@@ -26,28 +26,28 @@ class PowerSet:
         self.power_set.pop(i)
         return True
 
-    def intersection(self, set2):
+    def intersection(self, set2: set):
         intersected_set = []
         for value in set2:
             if self.get(value):
                 intersected_set.append(value)
         return set(intersected_set)
 
-    def union(self, set2):
+    def union(self, set2: set):
         union_set = []
         for value in set2:
             if not self.get(value):
                 union_set.append(value)
         return set(union_set + list(self.power_set.values()))
 
-    def difference(self, set2):
+    def difference(self, set2: set):
         difference_set = []
         for value in self.power_set.values():
             if not value in set2:
                 difference_set.append(value)
         return set(difference_set)
 
-    def issubset(self, set2):
+    def issubset(self, set2: set):
         for value in set2:
             if not self.get(value):
                 return False
