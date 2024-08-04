@@ -67,7 +67,7 @@ class TestPowerSet(unittest.TestCase):
         self.assertEqual(self.ps.size(), 1)
         self.ps.put("b")
         self.assertEqual(self.ps.size(), 2)
-        self.ps.put("a") # add duplicated value
+        self.ps.put("a")  # add duplicated value
         self.assertEqual(self.ps.size(), 2)
 
     def test_get(self):
@@ -79,7 +79,7 @@ class TestPowerSet(unittest.TestCase):
         self.ps.put("a")
         self.assertTrue(self.ps.remove("a"))
         self.assertFalse(self.ps.get("a"))
-        self.assertFalse(self.ps.remove("b")) # remove non-existent element
+        self.assertFalse(self.ps.remove("b"))  # remove non-existent element
 
     def test_intersection(self):
         # empty power set
