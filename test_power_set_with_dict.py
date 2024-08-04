@@ -83,6 +83,8 @@ class TestPowerSet(unittest.TestCase):
 
     def test_intersection(self):
         # empty power set
+        set2 = {}
+        self.assertEqual(self.ps.intersection(set2), set())
         set2 = {"b", "c"}
         self.assertEqual(self.ps.intersection(set2), set())
         self.ps.put("a")
@@ -91,6 +93,8 @@ class TestPowerSet(unittest.TestCase):
         self.assertEqual(self.ps.intersection(set2), {"b"})
         set2 = {"c", "d"}
         self.assertEqual(self.ps.intersection(set2), set())
+        set2 = {"a", "b"}
+        self.assertEqual(self.ps.intersection(set2), {"a", "b"})
 
     def test_union(self):
         self.ps.put("a")
