@@ -95,6 +95,14 @@ class TestPowerSet(unittest.TestCase):
         self.assertEqual(self.ps.intersection(set2), set())
         set2 = {"a", "b"}
         self.assertEqual(self.ps.intersection(set2), {"a", "b"})
+        # test with integers (1-100, 50-150)
+        self.ps.remove("a")
+        self.ps.remove("b")
+        set1 = set([i for i in range(1, 101)])
+        set2 = set([i for i in range(50, 151)])
+        for i in set1:
+            self.ps.put(i)
+        self.assertEqual(self.ps.intersection(set2), set1.intersection(set2))
 
     def test_union(self):
         self.ps.put("a")
