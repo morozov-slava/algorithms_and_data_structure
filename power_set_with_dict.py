@@ -31,21 +31,21 @@ class PowerSet:
         for value in set2:
             if self.get(value):
                 intersected_set.append(value)
-        return intersected_set 
+        return set(intersected_set)
 
     def union(self, set2):
         union_set = []
         for value in set2:
             if not self.get(value):
                 union_set.append(value)
-        return union_set + list(self.power_set.values())
+        return set(union_set + list(self.power_set.values()))
 
     def difference(self, set2):
         difference_set = []
         for value in self.power_set.values():
             if not value in set2:
                 difference_set.append(value)
-        return difference_set
+        return set(difference_set)
 
     def issubset(self, set2):
         for value in set2:
