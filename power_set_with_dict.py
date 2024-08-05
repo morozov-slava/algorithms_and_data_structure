@@ -12,12 +12,11 @@ class PowerSet:
         i = self.hash_func(value)
         if self.power_set.get(i) is None:
             self.power_set[i] = value
-            return i
         return None
 
     def get(self, value: str):
         i = self.hash_func(value)
-        return not self.power_set.get(i) is None
+        return self.power_set.get(i) is not None
 
     def remove(self, value: str):
         i = self.hash_func(value)
@@ -26,29 +25,31 @@ class PowerSet:
         self.power_set.pop(i)
         return True
 
-    def intersection(self, set2: set):
-        intersected_set = []
-        for value in set2:
+    def intersection(self, set2):
+        intersected_ps = PowerSet()
+        for value in set2.power_set.values():
             if self.get(value):
-                intersected_set.append(value)
-        return set(intersected_set)
+                intersected_ps.put(value)
+        return intersected_ps
 
-    def union(self, set2: set):
-        union_set = []
-        for value in set2:
-            if not self.get(value):
-                union_set.append(value)
-        return set(union_set + list(self.power_set.values()))
-
-    def difference(self, set2: set):
-        difference_set = []
+    def union(self, set2):
+        union_ps = PowerSet()
         for value in self.power_set.values():
-            if not value in set2:
-                difference_set.append(value)
-        return set(difference_set)
+            union_ps.put(value)
+        for value in set2.power_set.values():
+            if not union_ps.get(value):
+                union_ps.put(value)
+        return union_ps
+        
+    def difference(self, set2):
+        difference_ps = PowerSet()
+        for value in self.power_set.values():
+            if not set2.get(value):
+                difference_ps.put(value)
+        return difference_ps
 
-    def issubset(self, set2: set):
-        for value in set2:
+    def issubset(self, set2):
+        for value in set2.power_set.values():
             if not self.get(value):
                 return False
         return True
