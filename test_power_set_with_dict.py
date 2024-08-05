@@ -15,7 +15,6 @@ class PowerSet:
         i = self.hash_func(value)
         if self.power_set.get(i) is None:
             self.power_set[i] = value
-            return i
         return None
 
     def get(self, value: str):
@@ -29,29 +28,31 @@ class PowerSet:
         self.power_set.pop(i)
         return True
 
-    def intersection(self, set2: set):
-        intersected_set = []
-        for value in set2:
+    def intersection(self, set2):
+        intersected_ps = PowerSet()
+        for value in set2.power_set.values():
             if self.get(value):
-                intersected_set.append(value)
-        return set(intersected_set)
+                intersected_ps.put(value)
+        return intersected_ps
 
-    def union(self, set2: set):
-        union_set = []
-        for value in set2:
-            if not self.get(value):
-                union_set.append(value)
-        return set(union_set + list(self.power_set.values()))
-
-    def difference(self, set2: set):
-        difference_set = []
+    def union(self, set2):
+        union_ps = PowerSet()
         for value in self.power_set.values():
-            if value not in set2:
-                difference_set.append(value)
-        return set(difference_set)
+            union_ps.put(value)
+        for value in set2.power_set.values():
+            if not union_ps.get(value):
+                union_ps.put(value)
+        return union_ps
+        
+    def difference(self, set2):
+        difference_ps = PowerSet()
+        for value in self.power_set.values():
+            if not set2.get(value):
+                difference_ps.put(value)
+        return difference_ps
 
-    def issubset(self, set2: set):
-        for value in set2:
+    def issubset(self, set2):
+        for value in set2.power_set.values():
             if not self.get(value):
                 return False
         return True
@@ -82,51 +83,80 @@ class TestPowerSet(unittest.TestCase):
         self.assertFalse(self.ps.remove("b"))  # remove non-existent element
 
     def test_intersection(self):
-        # empty power set
-        set2 = {}
-        self.assertEqual(self.ps.intersection(set2), set())
-        set2 = {"b", "c"}
-        self.assertEqual(self.ps.intersection(set2), set())
+        # 2 empty sets
+        set2 = PowerSet()
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), [])
+        # core set is empty
+        set2 = PowerSet()
+        set2.put("b")
+        set2.put("c")
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), [])
+        # default intersection
         self.ps.put("a")
         self.ps.put("b")
-        set2 = {"b", "c"}
-        self.assertEqual(self.ps.intersection(set2), {"b"})
-        set2 = {"c", "d"}
-        self.assertEqual(self.ps.intersection(set2), set())
-        set2 = {"a", "b"}
-        self.assertEqual(self.ps.intersection(set2), {"a", "b"})
+        set2 = PowerSet()
+        set2.put("b")
+        set2.put("c")
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), ["b"])
+        # test
+        set2 = PowerSet()
+        set2.put("c")
+        set2.put("d")
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), [])
+        # test 
+        set2 = PowerSet()
+        set2.put("a")
+        set2.put("b")
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), ["a", "b"])
         # test with integers (1-100, 50-150)
         self.ps.remove("a")
         self.ps.remove("b")
-        set1 = set([i for i in range(1, 101)])
-        set2 = set([i for i in range(50, 151)])
-        for i in set1:
+        for i in range(1, 101):
             self.ps.put(i)
-        self.assertEqual(self.ps.intersection(set2), set1.intersection(set2))
+        set2 = PowerSet()
+        for i in range(50, 151):
+            set2.put(i)
+        self.assertEqual(list(self.ps.intersection(set2).power_set.values()), [i for i in range(50, 101)])
 
     def test_union(self):
         self.ps.put("a")
         self.ps.put("b")
-        set2 = {"b", "c"}
-        self.assertEqual(self.ps.union(set2), {"a", "b", "c"})
-        set2 = {"d", "e"}
-        self.assertEqual(self.ps.union(set2), {"a", "b", "d", "e"})
+        set2 = PowerSet()
+        set2.put("b")
+        set2.put("c")
+        self.assertEqual(list(self.ps.union(set2).power_set.values()), ["a", "b", "c"])
+        set2 = PowerSet()
+        set2.put("d")
+        set2.put("e")
+        self.assertEqual(list(self.ps.union(set2).power_set.values()), ["a", "b", "d", "e"])
 
     def test_difference(self):
         self.ps.put("a")
         self.ps.put("b")
-        set2 = {"b", "c"}
-        self.assertEqual(self.ps.difference(set2), {"a"})
-        set2 = {"a", "b"}
-        self.assertEqual(self.ps.difference(set2), set())
+        set2 = PowerSet()
+        set2.put("b")
+        set2.put("c")
+        self.assertEqual(list(self.ps.difference(set2).power_set.values()), ["a"])
+        set2 = PowerSet()
+        set2.put("a")
+        set2.put("b")
+        self.assertEqual(list(self.ps.difference(set2).power_set.values()), [])
 
     def test_issubset(self):
         self.ps.put("a")
         self.ps.put("b")
-        self.assertTrue(self.ps.issubset({"a"}))
-        self.assertFalse(self.ps.issubset({"a", "b", "c"}))
-        self.assertFalse(self.ps.issubset({"c", "d"}))
+        set2 = PowerSet()
+        set2.put("b")
+        self.assertTrue(self.ps.issubset(set2))
+        set2 = PowerSet()
+        set2.put("c")
+        set2.put("a")
+        self.assertFalse(self.ps.issubset(set2))
+        set2 = PowerSet()
+        self.assertTrue(self.ps.issubset(set2))
 
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()
+
+
