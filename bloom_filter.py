@@ -9,7 +9,7 @@ class BloomFilter:
         self.bit_array[byte_index] |= (1 << bit_index)
 
     def _get_bit(self, i):
-        byte_index = i// 8
+        byte_index = i // 8
         bit_index = i % 8
         return (self.bit_array[byte_index] >> bit_index) & 1
             
